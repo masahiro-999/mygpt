@@ -44,4 +44,10 @@ defmodule MygptWeb.MessageLive.Index do
 
     {:noreply, stream_delete(socket, :messages, message)}
   end
+
+  def handle_event("send", _, socket) do
+    {:ok, message} = Mygpt.ChatGpt.callapi()
+
+    {:noreply, stream_insert(socket, :messages, message)}
+  end
 end

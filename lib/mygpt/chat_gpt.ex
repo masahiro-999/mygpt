@@ -1,6 +1,8 @@
 defmodule Mygpt.ChatGpt do
   alias Mygpt.Chatlog
 
+  @role_table %{system: 0, user: 1, assistant: 2}
+
   def callapi() do
     messages =
       Chatlog.list_messages()
@@ -26,18 +28,14 @@ defmodule Mygpt.ChatGpt do
   end
 
   def to_num(str) do
-    case str do
-      "system" -> 0
-      "user" -> 1
-      "assistant" -> 2
-    end
+    @role_table[String.to_atom(str)]
   end
 
   def to_str(role_num) do
-    case role_num do
-      0 -> "system"
-      1 -> "user"
-      2 -> "assistant"
-    end
+    @role_table
+    |> Map.filter(fn {_key, value} -> value == role_num end)
+    |> Map.keys()
+    |> hd()
+    |> to_string()
   end
 end
